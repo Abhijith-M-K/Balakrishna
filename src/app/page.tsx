@@ -15,6 +15,8 @@ import Link from "next/link";
 import { formatDate } from "@/lib/formatters";
 import { ClassSchedule, Student, Trainer, Vehicle, FeePayment, TestSchedule } from "@prisma/client";
 
+export const dynamic = 'force-dynamic';
+
 type ClassWithDetails = ClassSchedule & {
   student: Student;
   trainer: Trainer;

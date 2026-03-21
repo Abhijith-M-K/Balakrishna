@@ -5,6 +5,8 @@ import prisma from "@/lib/prisma";
 import DownloadReceiptButton from "./DownloadReceiptButton";
 import { formatDate } from "@/lib/formatters";
 
+export const dynamic = 'force-dynamic';
+
 export default async function FeesPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
     const { q } = await searchParams;
 
@@ -84,7 +86,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
                                     </td>
                                 </tr>
                             ) : (
-                                payments.map(payment => (
+                                payments.map((payment: any) => (
                                     <tr key={payment.id} style={{ borderBottom: "1px solid var(--border-color)", transition: "background 0.2s" }} className="hover-row">
                                         <td style={{ padding: "1rem 1.5rem" }}>
                                             <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{payment.receiptNumber}</div>

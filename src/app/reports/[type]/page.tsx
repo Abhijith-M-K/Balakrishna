@@ -10,6 +10,8 @@ import {
     Globe
 } from "lucide-react";
 import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
 import { 
     getStudentReport, 
     getFeeCollectionReport, 
@@ -20,8 +22,8 @@ import {
     getMonthlyIncomeReport
 } from "../actions";
 import { formatDate } from "@/lib/formatters";
-import PrintButton from "./PrintButton";
-import DateFilter from "./DateFilter";
+import PrintButton from "./print-button";
+import DateFilter from "./date-filter";
 
 export default async function ReportDetail({ 
     params, 
@@ -222,8 +224,11 @@ export default async function ReportDetail({
                         <p style={{ fontSize: "1rem", fontWeight: 600, color: "#444" }}>DRIVING SCHOOL ADMINISTRATION</p>
                     </div>
                     <div style={{ textAlign: "right", fontSize: "0.85rem", color: "#666" }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem", marginBottom: "0.25rem" }}>
-                            <MapPin size={12} /> Bangalore, Karnataka, India
+                        <div style={{ marginBottom: "0.25rem" }}>
+                            Al-Mansoori business centre, Pookkad, Chemmenchery
+                        </div>
+                        <div style={{ marginBottom: "0.25rem" }}>
+                            near South Indian Bank, Koyilandy, Kerala 673304
                         </div>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem", marginBottom: "0.25rem" }}>
                             <Phone size={12} /> +91 98765 43210
@@ -260,7 +265,15 @@ export default async function ReportDetail({
                     <thead>
                         <tr style={{ background: "#f8fafc", borderBottom: "2px solid #e2e8f0" }}>
                             {columns.map(col => (
-                                <th key={col} style={{ padding: "1.25rem 1rem", color: "#475569", fontWeight: 700, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.025em" }}>{col}</th>
+                                <th key={col} style={{ 
+                                    padding: "1.25rem 1rem", 
+                                    color: "#475569", 
+                                    fontWeight: 700, 
+                                    fontSize: "0.75rem", 
+                                    textTransform: "uppercase", 
+                                    letterSpacing: "0.025em",
+                                    textAlign: (col === "Classes" || col === "Tests") ? "center" : "left"
+                                }}>{col}</th>
                             ))}
                         </tr>
                     </thead>
@@ -285,8 +298,8 @@ export default async function ReportDetail({
                                             <td style={{ padding: "1rem", fontSize: "0.85rem", color: "#334155" }}>{item.phoneNumber}</td>
                                             <td style={{ padding: "1rem", fontSize: "0.85rem", color: "#334155" }}>{formatDate(item.registrationDate)}</td>
                                             <td style={{ padding: "1rem" }}><span className="badge" style={{ fontSize: "0.7rem" }}>{item.status}</span></td>
-                                            <td style={{ padding: "1rem", fontWeight: 600, color: "#5b4bdf" }}>{item._count.classSchedules}</td>
-                                            <td style={{ padding: "1rem", fontWeight: 600, color: "#5b4bdf" }}>{item._count.testSchedules}</td>
+                                            <td style={{ padding: "1rem 0.5rem", fontWeight: 600, color: "#5b4bdf", textAlign: "center" }}>{item._count.classSchedules}</td>
+                                            <td style={{ padding: "1rem 0.5rem", fontWeight: 600, color: "#5b4bdf", textAlign: "center" }}>{item._count.testSchedules}</td>
                                         </>
                                     )}
                                     {type === "fees" && (

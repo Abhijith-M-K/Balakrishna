@@ -17,6 +17,8 @@ import StudentActions from "./StudentActions";
 import DownloadStudentListButton from "./DownloadStudentListButton";
 import DownloadStudentCardButton from "./DownloadStudentCardButton";
 
+export const dynamic = 'force-dynamic';
+
 export default async function StudentsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
     const { q, status, licenseType } = await searchParams;
 
