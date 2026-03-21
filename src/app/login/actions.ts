@@ -48,12 +48,13 @@ export async function loginAction(formData: FormData) {
         path: "/",
     });
 
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
         throw error;
     }
     console.error("Login error:", error);
-    redirect("/login?error=An unexpected error occurred");
+    const errorMessage = error?.message || "An unexpected error occurred";
+    redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
   }
 
   redirect("/");
