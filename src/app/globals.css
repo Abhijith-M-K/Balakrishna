@@ -64,9 +64,76 @@ button, input, select, textarea {
 
 .main-content {
   flex: 1;
-  padding: 2rem;
-  margin-left: 280px; /* sidebar width */
+  padding: 1rem;
+  padding-top: 5rem; /* space for mobile header */
+  margin-left: 0; 
   transition: all 0.3s ease;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 280px; /* sidebar width */
+    padding: 2rem;
+  }
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-secondary);
+}
+
+@media (max-width: 1023px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-header {
+    display: flex !important;
+  }
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-header {
+    display: none !important;
+  }
+}
+
+/* Mobile Overlay */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Glassmorphism Card Utilities */
@@ -228,5 +295,17 @@ p { color: var(--text-secondary); }
     background: #f8fafc !important;
     color: #000 !important;
     border-bottom: 2px solid #000 !important;
+  }
+}
+
+/* Hydration Fix Styles */
+.login-content {
+  width: 100%;
+  min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .mobile-close-btn {
+    display: none !important;
   }
 }

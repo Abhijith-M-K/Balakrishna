@@ -261,7 +261,7 @@ export default async function ReportDetail({
             )}
 
             <div className="glass-card report-container" style={{ padding: "0.5rem", overflowX: "auto", border: "1px solid var(--border-color)", borderTop: "4px solid var(--accent-primary)" }}>
-                <table className="report-table" style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <table className="report-table" style={{ minWidth: "800px", width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                     <thead>
                         <tr style={{ background: "#f8fafc", borderBottom: "2px solid #e2e8f0" }}>
                             {columns.map(col => (

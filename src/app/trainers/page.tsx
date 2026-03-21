@@ -58,7 +58,7 @@ export default async function TrainersPage() {
                 ) : (
                     trainers.map((t: any) => (
                         <div key={t.id} className="glass-card" style={{ padding: "1.5rem", borderTop: "4px solid var(--success)", display: "flex", flexDirection: "column" }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
                                 <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
                                     <div style={{ color: "var(--success)", padding: "0.75rem", background: "rgba(16, 185, 129, 0.1)", borderRadius: "var(--radius-md)" }}>
                                         <UserCheck size={32} />

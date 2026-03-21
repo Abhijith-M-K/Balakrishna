@@ -112,10 +112,9 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
                 </button>
             </form>
 
-            {/* Students Data Table */}
             <div className="glass-card" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ maxHeight: "calc(100vh - 280px)", overflowY: "auto", width: "100%" }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <div style={{ maxHeight: "calc(100vh - 280px)", overflowY: "auto", overflowX: "auto", width: "100%" }}>
+                    <table style={{ minWidth: "800px", width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                         <thead style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg-secondary, rgba(255,255,255,0.95))", backdropFilter: "blur(8px)" }}>
                             <tr style={{ borderBottom: "1px solid var(--border-color)", boxShadow: "0 1px 0 0 var(--border-color)" }}>
                                 <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", background: "inherit" }}>Student</th>

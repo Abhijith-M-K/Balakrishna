@@ -149,7 +149,7 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="dashboard-sections" style={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "1.5rem" }}>
+      <div className="dashboard-sections" style={{ display: "grid", gap: "1.5rem" }}>
         {/* Left Column: Today's Classes */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <section className="glass-card" style={{ padding: "1.5rem" }}>
@@ -282,15 +282,16 @@ function ClassItem({ time, student, trainer, vehicle, status }: { time: string, 
       borderRadius: "1rem",
       background: isProgress ? "radial-gradient(ellipse at top right, rgba(16, 185, 129, 0.1), transparent)" : "transparent",
       position: "relative",
-      overflow: "hidden"
+      overflow: "hidden",
+      flexWrap: "wrap"
     }}>
       {isProgress && <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "4px", background: "var(--success)" }} />}
       
-      <div style={{ minWidth: "75px", textAlign: "right", fontWeight: 700, color: isProgress ? "var(--success)" : isCompleted ? "var(--text-muted)" : "var(--text-secondary)", fontSize: "0.95rem" }}>
+      <div style={{ minWidth: "75px", textAlign: "right", fontWeight: 700, color: isProgress ? "var(--success)" : isCompleted ? "var(--text-muted)" : "var(--text-secondary)", fontSize: "0.95rem", flexShrink: 0 }}>
         {time}
       </div>
-      <div style={{ width: "1px", height: "40px", background: "var(--border-color)" }}></div>
-      <div style={{ flex: 1 }}>
+      <div style={{ width: "1px", height: "40px", background: "var(--border-color)", flexShrink: 0 }}></div>
+      <div style={{ flex: "1 1 200px" }}>
         <h4 style={{ fontSize: "1.05rem", fontWeight: 600, marginBottom: "0.35rem", color: isCompleted ? "var(--text-muted)" : "var(--text-primary)" }}>{student}</h4>
         <div style={{ display: "flex", gap: "1rem", fontSize: "0.85rem", color: "var(--text-muted)", flexWrap: "wrap" }}>
           <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}><UserCheck size={14} /> {trainer}</span>
@@ -312,10 +313,12 @@ function TestItem({ date, student, type }: { date: string, student: string, type
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
+      gap: "1rem",
       padding: "0.85rem",
       border: "1px solid var(--border-color)",
       borderRadius: "0.75rem",
-      background: "var(--bg-secondary)"
+      background: "var(--bg-secondary)",
+      flexWrap: "wrap"
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
         <div style={{

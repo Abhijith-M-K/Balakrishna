@@ -166,7 +166,8 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                                             background: "var(--bg-secondary)",
                                             transition: "all 0.2s ease",
                                             position: "relative",
-                                            overflow: "hidden"
+                                            overflow: "hidden",
+                                            flexWrap: "wrap"
                                         }} className="schedule-item-hover">
                                             
                                             {/* Status indicator line */}
@@ -194,10 +195,10 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                                             </div>
 
                                             {/* Vertical Separator */}
-                                            <div style={{ width: "1px", height: "40px", background: "var(--border-color)" }}></div>
+                                            <div style={{ width: "1px", height: "40px", background: "var(--border-color)", flexShrink: 0 }}></div>
 
                                             {/* Session Details */}
-                                            <div style={{ flex: 1 }}>
+                                            <div style={{ flex: "1 1 250px" }}>
                                                 <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.5rem" }}>
                                                     <h4 style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--text-primary)" }}>
                                                         {schedule.student.name}
@@ -226,7 +227,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                                             </div>
 
                                             {/* Actions */}
-                                            <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+                                            <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
                                                 {!schedule.attended && (
                                                     <Link 
                                                         href={`/schedule/${schedule.id}/edit`} 

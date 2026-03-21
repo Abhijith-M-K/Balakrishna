@@ -11,7 +11,8 @@ import {
     CarFront,
     FileBadge,
     BarChart3,
-    LogOut
+    LogOut,
+    X
 } from "lucide-react";
 import { logoutAction } from "@/app/login/actions";
 
@@ -26,25 +27,28 @@ const navItems = [
     { name: "Reports", href: "/reports", icon: BarChart3 },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
 
     return (
-        <aside className="glass-card" style={{
-            width: "280px",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            borderRadius: 0,
-            borderTop: "none",
-            borderLeft: "none",
-            borderBottom: "none",
-            padding: "2rem 1.5rem",
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 50
-        }}>
+        <aside className={`glass-card sidebar ${isOpen ? "open" : ""}`}>
+            {/* Mobile close button visible only when open horizontally, but we can just use CSS to position it or hide it on desktop */}
+            <button 
+                className="mobile-close-btn"
+                onClick={onClose}
+                style={{ 
+                    display: isOpen ? "flex" : "none", 
+                    position: "absolute", 
+                    top: "1.2rem", 
+                    right: "1.2rem", 
+                    background: "transparent", 
+                    border: "none", 
+                    cursor: "pointer",
+                    color: "var(--text-secondary)"
+                }}
+            >
+                <X size={24} />
+            </button>
             <div style={{ marginBottom: "3rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <div style={{
                     width: "40px",
@@ -75,6 +79,7 @@ export function Sidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={onClose}
                             style={{
                                 display: "flex",
                                 alignItems: "center",

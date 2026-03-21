@@ -111,7 +111,7 @@ function VehicleCard({ id, type, name, regNo, insurance, service }: any) {
 
     return (
         <div className="glass-card" style={{ padding: "1.5rem", borderTop: isError ? "4px solid var(--danger)" : "4px solid var(--success)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
                 <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
                     <div style={{ color: "var(--text-muted)", padding: "0.5rem", background: "var(--bg-tertiary)", borderRadius: "var(--radius-md)" }}>
                         {icon}

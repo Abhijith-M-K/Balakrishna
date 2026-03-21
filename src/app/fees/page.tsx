@@ -67,7 +67,7 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
             </div>
 
             <div className="glass-card" style={{ overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
-                <div style={{ maxHeight: "calc(100vh - 280px)", overflowY: "auto", width: "100%" }}>
+                <div style={{ maxHeight: "calc(100vh - 280px)", overflowY: "auto", overflowX: "auto", width: "100%" }}>
                     <table style={{ minWidth: "800px", width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                         <thead style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg-secondary, rgba(255,255,255,0.95))", backdropFilter: "blur(8px)" }}>
                             <tr style={{ borderBottom: "1px solid var(--border-color)", boxShadow: "0 1px 0 0 var(--border-color)" }}>

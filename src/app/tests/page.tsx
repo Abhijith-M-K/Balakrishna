@@ -203,7 +203,7 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
                             
                             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                 {groupedTests[dateKey].map((test: any) => (
-                                    <div key={test.id} className="glass-card" style={{ padding: "1.25rem", display: "flex", gap: "1.5rem", alignItems: "center", position: "relative", overflow: "hidden" }}>
+                                    <div key={test.id} className="glass-card" style={{ padding: "1.25rem", display: "flex", gap: "1.5rem", alignItems: "center", position: "relative", overflow: "hidden", flexWrap: "wrap" }}>
                                         
                                         {/* Status Sidebar */}
                                         <div style={{ 
@@ -218,12 +218,13 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
                                         <div style={{
                                             width: "56px", height: "56px", borderRadius: "12px",
                                             background: "rgba(59, 130, 246, 0.1)", display: "flex",
-                                            alignItems: "center", justifyContent: "center", fontWeight: 700, color: "var(--accent-primary)", fontSize: "1.25rem"
+                                            alignItems: "center", justifyContent: "center", fontWeight: 700, color: "var(--accent-primary)", fontSize: "1.25rem",
+                                            flexShrink: 0
                                         }}>
                                             {test.student.name.charAt(0)}
                                         </div>
 
-                                        <div style={{ flex: 1 }}>
+                                        <div style={{ flex: "1 1 200px" }}>
                                             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.35rem" }}>
                                                 <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--text-primary)" }}>{test.student.name}</h3>
                                                 <span className="badge">{test.student.licenseType}</span>
