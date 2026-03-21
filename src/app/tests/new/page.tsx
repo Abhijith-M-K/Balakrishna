@@ -3,6 +3,8 @@ import { ArrowLeft, FileBadge, Save } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { scheduleTest } from "../actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewTestPage() {
     const [students, vehicles] = await Promise.all([
         prisma.student.findMany({ 

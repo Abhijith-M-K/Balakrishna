@@ -4,6 +4,8 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import PaymentForm from "./PaymentForm";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AddFeePaymentPage() {
     // Fetch students to populate the dropdown and calculate balances
     const studentsRaw = await prisma.student.findMany({
@@ -12,8 +14,8 @@ export default async function AddFeePaymentPage() {
     });
 
     // Strip down data and calculate exact outstanding debts
-    const students = studentsRaw.map(s => {
-        const paid = s.feePayments.reduce((sum, p) => sum + p.paidAmount, 0);
+    const students = studentsRaw.map((s: any) => {
+        const paid = s.feePayments.reduce((sum: number, p: any) => sum + p.paidAmount, 0);
         return {
             id: s.id,
             name: s.name,
@@ -21,7 +23,7 @@ export default async function AddFeePaymentPage() {
             totalFee: s.totalFee,
             balance: s.totalFee - paid
         };
-    }).filter(s => s.balance > 0);
+    }).filter((s: any) => s.balance > 0);
 
     return (
         <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>

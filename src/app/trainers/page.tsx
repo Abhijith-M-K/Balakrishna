@@ -2,6 +2,8 @@ import { UserCheck, Plus, CarFront, Users, MapPin, Edit } from "lucide-react";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function TrainersPage() {
     const trainers = await prisma.trainer.findMany({
         include: {

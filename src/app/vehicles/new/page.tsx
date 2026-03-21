@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, CarFront, Save } from "lucide-react";
 import { addVehicle } from "../actions";
 
+export const dynamic = 'force-dynamic';
+
 export default function AddVehiclePage() {
     return (
         <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>

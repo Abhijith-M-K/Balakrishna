@@ -3,6 +3,8 @@ import { ArrowLeft, UserCheck, Save } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { addTrainer } from "../actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AddTrainerPage() {
     const activeVehicles = await prisma.vehicle.findMany();
 

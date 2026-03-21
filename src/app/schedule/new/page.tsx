@@ -3,6 +3,8 @@ import { ArrowLeft, CalendarPlus, Save } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { scheduleClass } from "../actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ScheduleNewClassPage() {
     const [students, trainers, vehicles] = await Promise.all([
         prisma.student.findMany({
