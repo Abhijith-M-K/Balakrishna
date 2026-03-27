@@ -15,6 +15,7 @@ import {
     LogOut,
     X
 } from "lucide-react";
+import { useLoading } from "@/context/LoadingContext";
 import { logoutAction } from "@/app/login/actions";
 
 const navItems = [
@@ -31,6 +32,14 @@ const navItems = [
 
 export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
+    const { showLoading } = useLoading();
+
+    const handleNavigation = (href: string) => {
+        if (pathname !== href) {
+            showLoading();
+            if (onClose) onClose();
+        }
+    };
 
     return (
         <aside className={`glass-card sidebar ${isOpen ? "open" : ""}`} style={{ padding: "1.5rem" }}>
@@ -81,7 +90,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
                         <Link
                             key={item.href}
                             href={item.href}
-                            onClick={onClose}
+                            onClick={() => handleNavigation(item.href)}
                             style={{
                                 display: "flex",
                                 alignItems: "center",
