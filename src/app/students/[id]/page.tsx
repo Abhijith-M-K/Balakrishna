@@ -179,6 +179,18 @@ export default async function StudentDetailsPage({ params }: { params: Promise<{
                                     <div style={{ fontWeight: 500, color: "var(--text-primary)" }}>{formatDate(student.registrationDate)}</div>
                                 </div>
                             </div>
+
+                            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <div style={{ padding: "0.5rem", background: "rgba(16, 185, 129, 0.1)", borderRadius: "0.5rem", color: "var(--success)" }}>
+                                    <CheckCircle2 size={18} />
+                                </div>
+                                <div>
+                                    <div className="text-muted" style={{ fontSize: "0.8rem" }}>Training Sessions</div>
+                                    <div style={{ fontWeight: 700, color: "var(--success)" }}>
+                                        {student.classSchedules.filter((s: any) => s.attended).length} Completed
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
 

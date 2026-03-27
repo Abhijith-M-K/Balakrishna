@@ -4,8 +4,11 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Trash2, AlertTriangle, X } from "lucide-react";
 import { deleteStudent } from "./actions";
+import { useLoading } from "@/context/LoadingContext";
+import { toast } from "sonner";
 
 export default function StudentActions({ id }: { id: string }) {
+    const { showLoading, hideLoading } = useLoading();
     const [isDeleting, setIsDeleting] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -27,13 +30,25 @@ export default function StudentActions({ id }: { id: string }) {
 
     const handleDelete = async () => {
         setIsDeleting(true);
+        setShowConfirm(false); // Close modal
+        showLoading("Deleting student record...");
+        
         try {
-            await deleteStudent(id);
-        } catch (error) {
+            const result = await deleteStudent(id);
+            if (result?.error) {
+                toast.error(result.error);
+                hideLoading();
+                setIsDeleting(false);
+            } else {
+                toast.success("Student deleted successfully");
+                // hideLoading() will be handled by navigation or can be called here
+                hideLoading();
+            }
+        } catch (error: any) {
             console.error("Failed to delete student:", error);
-            alert("An error occurred while deleting the student.");
+            toast.error("An error occurred while deleting the student.");
+            hideLoading();
             setIsDeleting(false);
-            setShowConfirm(false);
         }
     }
 

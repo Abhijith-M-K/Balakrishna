@@ -5,11 +5,13 @@ import {
     AlertTriangle,
     FileText,
     Wrench,
-    Edit
+    Edit,
+    Shield
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { formatDate } from "@/lib/formatters";
+import VehicleActions from "./VehicleActions";
 
 export const dynamic = 'force-dynamic';
 
@@ -26,54 +28,57 @@ export default async function VehiclesPage() {
     const now = new Date();
     const attentionCount = vehicles.filter((v: any) => {
         const isInsuranceExpired = v.insuranceExpiry && new Date(v.insuranceExpiry) < now;
+        const isPollutionExpired = v.pollutionExpiry && new Date(v.pollutionExpiry) < now;
         const isServiceDue = v.serviceReminder && new Date(v.serviceReminder) < now;
-        return isInsuranceExpired || isServiceDue;
+        return isInsuranceExpired || isPollutionExpired || isServiceDue;
     }).length;
 
     return (
         <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>
-            <header style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
-                <div>
-                    <h1 style={{ marginBottom: "0.25rem" }}>Vehicle Management</h1>
-                    <p className="text-muted">Manage training vehicles, compliance, and service requests.</p>
-                </div>
-                <Link href="/vehicles/new" className="btn btn-primary" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Plus size={18} />
-                    Add Vehicle
-                </Link>
-            </header>
-
-            {/* Fleet Overview */}
-            <div className="glass-card" style={{ 
-                padding: "1.5rem", 
-                marginBottom: "2rem", 
-                display: "flex", 
-                gap: "2rem", 
-                flexWrap: "wrap",
-                position: "sticky",
-                top: "1rem",
-                zIndex: 30
+            <div style={{ 
+                position: "sticky", 
+                top: "-1rem", 
+                zIndex: 30, 
+                background: "var(--bg-primary)", 
+                padding: "1rem", 
+                margin: "-1rem -1rem 2rem -1rem", 
+                borderBottom: "1px solid var(--border-color)",
+                boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)"
             }}>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Total Fleet</div>
-                    <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--text-primary)" }}>{totalFleet}</div>
-                </div>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Cars (LMV)</div>
-                    <div style={{ fontSize: "2rem", fontWeight: 600, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <CarFront size={24} color="var(--accent-primary)" /> {lmvCount}
+                <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
+                    <div>
+                        <h1 style={{ marginBottom: "0.25rem" }}>Vehicle Management</h1>
+                        <p className="text-muted">Manage training vehicles, compliance, and service requests.</p>
                     </div>
-                </div>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Bikes (2W)</div>
-                    <div style={{ fontSize: "2rem", fontWeight: 600, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <Bike size={24} color="var(--warning)" /> {bikeCount}
+                    <Link href="/vehicles/new" className="btn btn-primary" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <Plus size={18} />
+                        Add Vehicle
+                    </Link>
+                </header>
+
+                {/* Fleet Overview */}
+                <div className="glass-card" style={{ padding: "1.25rem", display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Total Fleet</div>
+                        <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)" }}>{totalFleet}</div>
                     </div>
-                </div>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Attention Needed</div>
-                    <div style={{ fontSize: "2rem", fontWeight: 600, color: "var(--danger)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <AlertTriangle size={24} /> {attentionCount}
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Cars (LMV)</div>
+                        <div style={{ fontSize: "1.75rem", fontWeight: 600, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <CarFront size={20} color="var(--accent-primary)" /> {lmvCount}
+                        </div>
+                    </div>
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Bikes (2W)</div>
+                        <div style={{ fontSize: "1.75rem", fontWeight: 600, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <Bike size={20} color="var(--warning)" /> {bikeCount}
+                        </div>
+                    </div>
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Attention Needed</div>
+                        <div style={{ fontSize: "1.75rem", fontWeight: 600, color: "var(--danger)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <AlertTriangle size={20} /> {attentionCount}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,6 +97,7 @@ export default async function VehiclesPage() {
                             name={`${v.vehicleType} Training Vehicle`} 
                             regNo={v.registrationNumber}
                             insurance={v.insuranceExpiry}
+                            pollution={v.pollutionExpiry}
                             service={v.serviceReminder}
                         />
                     ))
@@ -101,11 +107,12 @@ export default async function VehiclesPage() {
     );
 }
 
-function VehicleCard({ id, type, name, regNo, insurance, service }: any) {
+function VehicleCard({ id, type, name, regNo, insurance, pollution, service }: any) {
     const now = new Date();
     const isInsuranceExpired = insurance && new Date(insurance) < now;
+    const isPollutionExpired = pollution && new Date(pollution) < now;
     const isServiceDue = service && new Date(service) < now;
-    const isError = isInsuranceExpired || isServiceDue;
+    const isError = isInsuranceExpired || isPollutionExpired || isServiceDue;
     
     const icon = type.includes("MCW") ? <Bike size={40} /> : <CarFront size={40} />;
 
@@ -135,6 +142,13 @@ function VehicleCard({ id, type, name, regNo, insurance, service }: any) {
                     </span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem" }}>
+                    <Shield size={16} color="var(--text-muted)" />
+                    <span className="text-muted">Pollution Expiry:</span>
+                    <span style={{ fontWeight: 500, color: isPollutionExpired ? 'var(--danger)' : 'var(--text-primary)' }}>
+                        {pollution ? formatDate(pollution) : "Not Tracked"} {isPollutionExpired && <span>(Expired)</span>}
+                    </span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem" }}>
                     <Wrench size={16} color="var(--text-muted)" />
                     <span className="text-muted">Service Due:</span>
                     <span style={{ fontWeight: 500, color: isServiceDue ? 'var(--danger)' : 'var(--text-primary)' }}>
@@ -147,6 +161,7 @@ function VehicleCard({ id, type, name, regNo, insurance, service }: any) {
                 <Link href={`/vehicles/${id}/edit`} className="btn btn-secondary" style={{ flex: 1, padding: "0.5rem", fontSize: "0.875rem", display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                     <Edit size={16} /> Edit Details
                 </Link>
+                <VehicleActions id={id} regNo={regNo} />
             </div>
         </div>
     );

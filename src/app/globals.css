@@ -309,3 +309,55 @@ p { color: var(--text-secondary); }
     display: none !important;
   }
 }
+
+/* Vehicle Loader Styles */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  gap: 1.5rem;
+}
+
+.vehicle-container {
+  position: relative;
+  width: 200px;
+  height: 60px;
+  overflow: hidden;
+  border-bottom: 2px solid var(--accent-primary);
+}
+
+.vehicle-moving {
+  position: absolute;
+  bottom: 5px;
+  left: -50px;
+  animation: drive 2s linear infinite;
+  color: var(--accent-primary);
+}
+
+@keyframes drive {
+  0% { left: -50px; }
+  100% { left: 200px; }
+}
+
+.loader-text {
+  font-weight: 600;
+  color: var(--accent-primary);
+  letter-spacing: 0.05em;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Toast Overrides (optional but good for consistency) */
+[data-sonner-toaster] {
+  font-family: var(--font-sans) !important;
+}

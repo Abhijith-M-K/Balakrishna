@@ -11,6 +11,7 @@ import {
     CarFront,
     FileBadge,
     BarChart3,
+    FilePlus,
     LogOut,
     X
 } from "lucide-react";
@@ -20,6 +21,7 @@ const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Students", href: "/students", icon: Users },
     { name: "Fees", href: "/fees", icon: CreditCard },
+    { name: "Additional Class", href: "/additional-classes", icon: FilePlus },
     { name: "Schedule", href: "/schedule", icon: CalendarDays },
     { name: "Trainers", href: "/trainers", icon: UserCheck },
     { name: "Vehicles", href: "/vehicles", icon: CarFront },
@@ -31,47 +33,47 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
     const pathname = usePathname();
 
     return (
-        <aside className={`glass-card sidebar ${isOpen ? "open" : ""}`}>
+        <aside className={`glass-card sidebar ${isOpen ? "open" : ""}`} style={{ padding: "1.5rem" }}>
             {/* Mobile close button visible only when open horizontally, but we can just use CSS to position it or hide it on desktop */}
-            <button 
+            <button
                 className="mobile-close-btn"
                 onClick={onClose}
-                style={{ 
-                    display: isOpen ? "flex" : "none", 
-                    position: "absolute", 
-                    top: "1.2rem", 
-                    right: "1.2rem", 
-                    background: "transparent", 
-                    border: "none", 
+                style={{
+                    display: isOpen ? "flex" : "none",
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem",
+                    background: "transparent",
+                    border: "none",
                     cursor: "pointer",
                     color: "var(--text-secondary)"
                 }}
             >
-                <X size={24} />
+                <X size={20} />
             </button>
-            <div style={{ marginBottom: "3rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.6rem" }}>
                 <div style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "10px",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "8px",
                     background: "linear-gradient(135deg, var(--accent-primary), var(--accent-hover))",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 4px 14px 0 rgba(91, 75, 223, 0.39)"
+                    boxShadow: "0 4px 14px 0 rgba(91, 75, 223, 0.3)"
                 }}>
-                    <CarFront size={20} color="white" />
+                    <CarFront size={16} color="white" />
                 </div>
                 <div>
-                    <h2 style={{ fontSize: "1.1rem", margin: 0 }}>Balakrishna</h2>
-                    <p className="text-muted" style={{ fontSize: "0.75rem", margin: 0 }}>Admin Portal</p>
+                    <h2 style={{ fontSize: "1rem", margin: 0 }}>Balakrishna</h2>
+                    <p className="text-muted" style={{ fontSize: "0.7rem", margin: 0 }}>Admin Portal</p>
                 </div>
             </div>
 
-            <nav style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
+            <nav style={{ display: "flex", flexDirection: "column", gap: "0.25rem", flex: 1 }}>
                 {navItems.map((item) => {
-                    const isActive = item.href === "/" 
-                        ? pathname === "/" 
+                    const isActive = item.href === "/"
+                        ? pathname === "/"
                         : pathname === item.href || pathname.startsWith(item.href + "/");
                     const Icon = item.icon;
 
@@ -83,29 +85,18 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "1rem",
-                                padding: "0.875rem 1rem",
-                                borderRadius: "0.75rem",
-                                background: isActive ? "linear-gradient(135deg, rgba(91, 75, 223, 0.15), rgba(91, 75, 223, 0.05))" : "transparent",
+                                gap: "0.75rem",
+                                padding: "0.65rem 0.875rem",
+                                borderRadius: "0.6rem",
+                                background: isActive ? "linear-gradient(135deg, rgba(91, 75, 223, 0.12), rgba(91, 75, 223, 0.04))" : "transparent",
                                 color: isActive ? "var(--accent-primary)" : "var(--text-secondary)",
+                                fontSize: "0.875rem",
                                 fontWeight: isActive ? 600 : 500,
-                                border: isActive ? "1px solid rgba(91, 75, 223, 0.2)" : "1px solid transparent",
+                                border: isActive ? "1px solid rgba(91, 75, 223, 0.15)" : "1px solid transparent",
                                 transition: "all 0.2s ease"
                             }}
-                            onMouseEnter={(e) => {
-                                if (!isActive) {
-                                    e.currentTarget.style.background = "rgba(0,0,0,0.05)";
-                                    e.currentTarget.style.color = "var(--text-primary)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!isActive) {
-                                    e.currentTarget.style.background = "transparent";
-                                    e.currentTarget.style.color = "var(--text-secondary)";
-                                }
-                            }}
                         >
-                            <Icon size={20} />
+                            <Icon size={18} />
                             {item.name}
                         </Link>
                     );
@@ -113,12 +104,12 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
             </nav>
 
             <div style={{
-                marginTop: "auto",
-                paddingTop: "1.5rem",
+                marginTop: "1.5rem",
+                paddingTop: "1rem",
                 borderTop: "1px solid var(--border-color)",
                 display: "flex",
                 alignItems: "center",
-                gap: "1rem"
+                gap: "0.75rem"
             }}>
                 <div style={{
                     width: "40px",
@@ -136,7 +127,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
                     <p className="text-muted" style={{ margin: 0, fontSize: "0.7rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>balakrishna@mailinator.com</p>
                 </div>
                 <form action={logoutAction}>
-                    <button 
+                    <button
                         type="submit"
                         style={{
                             background: "rgba(239, 68, 68, 0.08)",

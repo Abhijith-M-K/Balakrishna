@@ -28,8 +28,8 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
             vehicle: true
         },
         orderBy: [
-            { date: "asc" },
-            { startTime: "asc" }
+            { date: "desc" },
+            { startTime: "desc" }
         ]
     });
 

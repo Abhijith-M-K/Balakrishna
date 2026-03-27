@@ -1,6 +1,7 @@
 import { UserCheck, Plus, CarFront, Users, MapPin, Edit } from "lucide-react";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import TrainerActions from "./TrainerActions";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,8 +21,17 @@ export default async function TrainersPage() {
 
     return (
         <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>
-            <div style={{ position: "sticky", top: "0", zIndex: 30, background: "var(--bg-primary)", paddingTop: "1rem", paddingBottom: "1rem", margin: "-1rem -1rem 2rem -1rem", paddingLeft: "1rem", paddingRight: "1rem", borderBottom: "1px solid var(--border-color)" }}>
-                <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ 
+                position: "sticky", 
+                top: "-1rem", 
+                zIndex: 30, 
+                background: "var(--bg-primary)", 
+                padding: "1rem", 
+                margin: "-1rem -1rem 2rem -1rem", 
+                borderBottom: "1px solid var(--border-color)",
+                boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)"
+            }}>
+                <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
                     <div>
                         <h1 style={{ marginBottom: "0.25rem" }}>Staff & Trainers</h1>
                         <p className="text-muted">Manage instructors, vehicle bounds, and active allocations.</p>
@@ -31,21 +41,21 @@ export default async function TrainersPage() {
                         Add New Trainer
                     </Link>
                 </header>
-            </div>
 
-            {/* Staff Overview */}
-            <div className="glass-card" style={{ padding: "1.5rem", marginBottom: "2rem", display: "flex", gap: "2rem", flexWrap: "wrap", position: "sticky", top: "6rem", zIndex: 20 }}>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Employed Trainers</div>
-                    <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <UserCheck size={28} color="var(--success)" /> {totalStaff}
+                {/* Staff Overview */}
+                <div className="glass-card" style={{ padding: "1.25rem", display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Employed Trainers</div>
+                        <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <UserCheck size={24} color="var(--success)" /> {totalStaff}
+                        </div>
                     </div>
-                </div>
-                <div style={{ width: "1px", background: "var(--border-color)" }}></div>
-                <div style={{ flex: 1, minWidth: "120px" }}>
-                    <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500 }}>Active Trainees (Live)</div>
-                    <div style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                        <Users size={28} color="var(--accent-primary)" /> {activeTrainingLoad}
+                    <div style={{ width: "1px", background: "var(--border-color)" }}></div>
+                    <div style={{ flex: 1, minWidth: "120px" }}>
+                        <div className="text-muted" style={{ marginBottom: "0.5rem", fontWeight: 500, fontSize: "0.875rem" }}>Active Trainees (Live)</div>
+                        <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <Users size={24} color="var(--accent-primary)" /> {activeTrainingLoad}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,6 +107,7 @@ export default async function TrainersPage() {
                                 <Link href={`/trainers/${t.id}/edit`} className="btn btn-secondary" style={{ flex: 1, padding: "0.5rem", fontSize: "0.875rem", display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                                     <Edit size={16} /> Update Details
                                 </Link>
+                                <TrainerActions id={t.id} name={t.name} />
                             </div>
                         </div>
                     ))

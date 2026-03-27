@@ -43,7 +43,7 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
             vehicle: true
         },
         orderBy: {
-            testDate: filterStatus === "passed" || filterStatus === "failed" ? "desc" : "asc"
+            testDate: "desc"
         }
     });
 

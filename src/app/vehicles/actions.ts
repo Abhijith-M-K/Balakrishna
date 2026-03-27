@@ -2,12 +2,12 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function addVehicle(formData: FormData) {
     const registrationNumber = formData.get("registrationNumber") as string;
     const vehicleType = formData.get("vehicleType") as string;
     const insuranceExpiryStr = formData.get("insuranceExpiry") as string;
+    const pollutionExpiryStr = formData.get("pollutionExpiry") as string;
     const serviceReminderStr = formData.get("serviceReminder") as string;
 
     if (!registrationNumber || !vehicleType) {
@@ -20,6 +20,7 @@ export async function addVehicle(formData: FormData) {
                 registrationNumber: registrationNumber.trim().toUpperCase(),
                 vehicleType,
                 insuranceExpiry: insuranceExpiryStr ? new Date(insuranceExpiryStr) : null,
+                pollutionExpiry: pollutionExpiryStr ? new Date(pollutionExpiryStr) : null,
                 serviceReminder: serviceReminderStr ? new Date(serviceReminderStr) : null,
             }
         });
@@ -29,13 +30,14 @@ export async function addVehicle(formData: FormData) {
     }
 
     revalidatePath("/vehicles");
-    redirect("/vehicles");
+    return { success: true };
 }
 
 export async function editVehicle(id: string, formData: FormData) {
     const registrationNumber = formData.get("registrationNumber") as string;
     const vehicleType = formData.get("vehicleType") as string;
     const insuranceExpiryStr = formData.get("insuranceExpiry") as string;
+    const pollutionExpiryStr = formData.get("pollutionExpiry") as string;
     const serviceReminderStr = formData.get("serviceReminder") as string;
 
     if (!registrationNumber || !vehicleType) {
@@ -49,6 +51,7 @@ export async function editVehicle(id: string, formData: FormData) {
                 registrationNumber: registrationNumber.trim().toUpperCase(),
                 vehicleType,
                 insuranceExpiry: insuranceExpiryStr ? new Date(insuranceExpiryStr) : null,
+                pollutionExpiry: pollutionExpiryStr ? new Date(pollutionExpiryStr) : null,
                 serviceReminder: serviceReminderStr ? new Date(serviceReminderStr) : null,
             }
         });
@@ -58,5 +61,18 @@ export async function editVehicle(id: string, formData: FormData) {
     }
 
     revalidatePath("/vehicles");
-    redirect("/vehicles");
+    return { success: true };
+}
+
+export async function deleteVehicle(id: string) {
+    try {
+        await prisma.vehicle.delete({
+            where: { id }
+        });
+        revalidatePath("/vehicles");
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to delete vehicle:", error);
+        return { error: "Failed to delete vehicle. It may be assigned to students or classes." };
+    }
 }

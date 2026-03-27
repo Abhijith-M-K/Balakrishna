@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function addTrainer(formData: FormData) {
     const name = formData.get("name") as string;
@@ -33,7 +32,7 @@ export async function addTrainer(formData: FormData) {
     }
 
     revalidatePath("/trainers");
-    redirect("/trainers");
+    return { success: true };
 }
 
 export async function editTrainer(id: string, formData: FormData) {
@@ -66,5 +65,18 @@ export async function editTrainer(id: string, formData: FormData) {
     }
 
     revalidatePath("/trainers");
-    redirect("/trainers");
+    return { success: true };
+}
+
+export async function deleteTrainer(id: string) {
+    try {
+        await prisma.trainer.delete({
+            where: { id }
+        });
+        revalidatePath("/trainers");
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to delete trainer:", error);
+        return { error: "Failed to delete trainer. It may be assigned to active classes or students." };
+    }
 }

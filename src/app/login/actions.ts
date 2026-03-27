@@ -20,13 +20,13 @@ export async function loginAction(formData: FormData) {
     });
 
     if (!user) {
-      redirect("/login?error=Invalid credentials");
+      return { error: "Invalid credentials" };
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      redirect("/login?error=Invalid credentials");
+      return { error: "Invalid credentials" };
     }
 
     // Create the session
@@ -49,12 +49,8 @@ export async function loginAction(formData: FormData) {
     });
 
   } catch (error: any) {
-    if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
-        throw error;
-    }
     console.error("Login error:", error);
-    const errorMessage = error?.message || "An unexpected error occurred";
-    redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
+    return { error: error?.message || "An unexpected error occurred" };
   }
 
   redirect("/");

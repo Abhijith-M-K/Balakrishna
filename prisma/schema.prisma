@@ -16,6 +16,7 @@ enum Role {
 enum LicenseType {
   LMV
   MCWG
+  BOTH
   HMV
 }
 
@@ -63,12 +64,13 @@ model Student {
   
   // Relations
   assignedTrainerId String?        @db.ObjectId
-  assignedTrainer   Trainer?       @relation(fields: [assignedTrainerId], references: [id])
+  assignedTrainer   Trainer?       @relation(fields: [assignedTrainerId], references: [id], onDelete: SetNull)
   
   assignedVehicleId String?        @db.ObjectId
   assignedVehicle   Vehicle?       @relation(fields: [assignedVehicleId], references: [id])
 
   feePayments      FeePayment[]
+  additionalClasses AdditionalClass[]
   classSchedules   ClassSchedule[]
   testSchedules    TestSchedule[]
   documents        Document[]
@@ -77,10 +79,25 @@ model Student {
   updatedAt        DateTime        @updatedAt
 }
 
+model AdditionalClass {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  studentId     String        @db.ObjectId
+  student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  licenseType   LicenseType
+  amount        Float
+  paymentDate   DateTime      @default(now())
+  paymentMethod PaymentMethod
+  receiptNumber String        @unique // e.g., ADD-001
+  notes         String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
 model FeePayment {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   studentId     String        @db.ObjectId
-  student       Student       @relation(fields: [studentId], references: [id])
+  student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   totalFee      Float
   paidAmount    Float
   balance       Float         // Can be calculated, but good to store
@@ -115,6 +132,7 @@ model Vehicle {
   vehicleType        String          // e.g., Car, Bike
   registrationNumber String          @unique
   insuranceExpiry    DateTime?
+  pollutionExpiry    DateTime?
   serviceReminder    DateTime?
   
   // Relations
@@ -135,10 +153,10 @@ model ClassSchedule {
   
   // Relations
   studentId   String   @db.ObjectId
-  student     Student  @relation(fields: [studentId], references: [id])
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
   trainerId   String   @db.ObjectId
-  trainer     Trainer  @relation(fields: [trainerId], references: [id])
+  trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   
   vehicleId   String   @db.ObjectId
   vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
@@ -155,7 +173,7 @@ model TestSchedule {
   
   // Relations
   studentId   String     @db.ObjectId
-  student     Student    @relation(fields: [studentId], references: [id])
+  student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
   vehicleId   String?    @db.ObjectId
   vehicle     Vehicle?   @relation(fields: [vehicleId], references: [id])
@@ -173,7 +191,7 @@ model Document {
   
   // Relations
   studentId    String   @db.ObjectId
-  student      Student  @relation(fields: [studentId], references: [id])
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

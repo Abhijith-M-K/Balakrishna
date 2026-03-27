@@ -36,6 +36,15 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
 
     const students = await prisma.student.findMany({
         where,
+        include: {
+            _count: {
+                select: {
+                    classSchedules: {
+                        where: { attended: true }
+                    }
+                }
+            }
+        },
         orderBy: { createdAt: 'desc' }
     });
 
@@ -103,6 +112,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
                         <option value="">All Licenses</option>
                         <option value="LMV">LMV (Car)</option>
                         <option value="MCWG">MCWG (Bike)</option>
+                        <option value="BOTH">Both (LMV & MCWG)</option>
                         <option value="HMV">HMV (Heavy)</option>
                     </select>
                 </div>
@@ -121,6 +131,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
                                 <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", background: "inherit" }}>License</th>
                                 <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", background: "inherit" }}>Enroll Date</th>
                                 <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", background: "inherit" }}>Status</th>
+                                <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", background: "inherit" }}>Training</th>
                                 <th style={{ padding: "1rem 1.5rem", fontWeight: 600, color: "var(--text-secondary)", fontSize: "0.875rem", textAlign: "right", background: "inherit" }}>Actions</th>
                             </tr>
                         </thead>
@@ -143,6 +154,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
                                     licenseType={student.licenseType} 
                                     enrollDate={student.registrationDate} 
                                     status={student.status}
+                                    trainingCount={student._count.classSchedules}
                                     avatar={student.name.charAt(0)} 
                                 />
                             ))
@@ -155,7 +167,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
     );
 }
 
-function StudentRow({ student, dbId, id, name, phone, licenseType, enrollDate, status, avatar }: any) {
+function StudentRow({ student, dbId, id, name, phone, licenseType, enrollDate, status, avatar, trainingCount }: any) {
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'TRAINING': return <span className="badge badge-accent"><Clock size={12} style={{ marginRight: '4px' }} /> Training</span>;
@@ -201,6 +213,25 @@ function StudentRow({ student, dbId, id, name, phone, licenseType, enrollDate, s
             </td>
             <td style={{ padding: "1rem 1.5rem" }}>
                 {getStatusBadge(status)}
+            </td>
+            <td style={{ padding: "1rem 1.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <div style={{ 
+                        width: "32px", 
+                        height: "32px", 
+                        borderRadius: "8px", 
+                        background: "rgba(16, 185, 129, 0.1)", 
+                        color: "var(--success)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 700,
+                        fontSize: "0.85rem"
+                    }}>
+                        {trainingCount}
+                    </div>
+                    <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 500 }}>Sessions</span>
+                </div>
             </td>
             <td style={{ padding: "1rem 1.5rem", textAlign: "right", whiteSpace: "nowrap" }}>
                 <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
