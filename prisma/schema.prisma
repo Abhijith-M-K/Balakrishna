@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -40,7 +40,7 @@ enum TestStatus {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
   password  String
@@ -50,7 +50,7 @@ model User {
 }
 
 model Student {
-  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  id               String          @id @default(cuid())
   studentId        String          @unique // e.g., STU-001
   name             String
   phoneNumber      String
@@ -63,10 +63,10 @@ model Student {
   status           StudentStatus   @default(ENROLLED)
   
   // Relations
-  assignedTrainerId String?        @db.ObjectId
+  assignedTrainerId String?
   assignedTrainer   Trainer?       @relation(fields: [assignedTrainerId], references: [id], onDelete: SetNull)
   
-  assignedVehicleId String?        @db.ObjectId
+  assignedVehicleId String?
   assignedVehicle   Vehicle?       @relation(fields: [assignedVehicleId], references: [id])
 
   feePayments      FeePayment[]
@@ -80,8 +80,8 @@ model Student {
 }
 
 model AdditionalClass {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  studentId     String        @db.ObjectId
+  id            String        @id @default(cuid())
+  studentId     String
   student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   licenseType   LicenseType
   amount        Float
@@ -95,8 +95,8 @@ model AdditionalClass {
 }
 
 model FeePayment {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  studentId     String        @db.ObjectId
+  id            String        @id @default(cuid())
+  studentId     String
   student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   totalFee      Float
   paidAmount    Float
@@ -110,14 +110,14 @@ model FeePayment {
 }
 
 model Trainer {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  id            String          @id @default(cuid())
   name          String
   phone         String
   licenseNumber String
   experience    Int?            // in years
   
   // Relations
-  assignedVehicleId String?       @db.ObjectId
+  assignedVehicleId String?
   assignedVehicle   Vehicle?      @relation(fields: [assignedVehicleId], references: [id])
   
   students        Student[]
@@ -128,7 +128,7 @@ model Trainer {
 }
 
 model Vehicle {
-  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String          @id @default(cuid())
   vehicleType        String          // e.g., Car, Bike
   registrationNumber String          @unique
   insuranceExpiry    DateTime?
@@ -146,19 +146,19 @@ model Vehicle {
 }
 
 model ClassSchedule {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   date        DateTime
   startTime   DateTime
   endTime     DateTime
   
   // Relations
-  studentId   String   @db.ObjectId
+  studentId   String
   student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
-  trainerId   String   @db.ObjectId
+  trainerId   String
   trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   
-  vehicleId   String   @db.ObjectId
+  vehicleId   String
   vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
 
   attended    Boolean  @default(false)
@@ -168,14 +168,14 @@ model ClassSchedule {
 }
 
 model TestSchedule {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(cuid())
   testDate    DateTime
   
   // Relations
-  studentId   String     @db.ObjectId
+  studentId   String
   student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
-  vehicleId   String?    @db.ObjectId
+  vehicleId   String?
   vehicle     Vehicle?   @relation(fields: [vehicleId], references: [id])
 
   status      TestStatus @default(PENDING)
@@ -185,12 +185,12 @@ model TestSchedule {
 }
 
 model Document {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(cuid())
   documentType String   // e.g., ID_PROOF, LEARNER_LICENSE, PHOTO
   fileUrl      String   // Path or URL to the uploaded file
   
   // Relations
-  studentId    String   @db.ObjectId
+  studentId    String
   student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   createdAt    DateTime @default(now())
