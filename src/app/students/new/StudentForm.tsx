@@ -174,11 +174,18 @@ export function StudentForm() {
                             outline: "none"
                         }}
                     />
+                    <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>
+                        Note: A unique Student ID will be generated automatically upon saving.
+                    </p>
                 </div>
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border-color)" }}>
-                <Link href="/students" className="btn btn-secondary">
+                <Link 
+                    href="/students" 
+                    onClick={() => showLoading()}
+                    className="btn btn-secondary"
+                >
                     Cancel
                 </Link>
                 <button type="submit" className="btn btn-primary">

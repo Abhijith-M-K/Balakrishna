@@ -52,9 +52,9 @@ export default async function AdditionalClassesPage({ searchParams }: { searchPa
             `}</style>
             
             <div style={{ flexShrink: 0 }}>
-                <header style={{ marginBottom: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
+                <header className="page-header">
                     <div>
-                        <h1 style={{ marginBottom: "0.5rem" }}>Additional Classes</h1>
+                        <h1 style={{ marginBottom: "0.25rem" }}>Additional Classes</h1>
                         <p className="text-muted">Track payments and sessions for extra driving classes.</p>
                     </div>
                     <Link href="/additional-classes/new" className="btn btn-primary">
@@ -89,7 +89,7 @@ export default async function AdditionalClassesPage({ searchParams }: { searchPa
                 </form>
             </div>
 
-            <div className="glass-card classes-scroll-area" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", marginBottom: "2rem" }}>
+            <div className="glass-card students-scroll-area" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", marginBottom: "2rem" }}>
                 <div style={{ overflowY: "auto", overflowX: "auto", width: "100%", flex: 1 }}>
                     <table style={{ minWidth: "800px", width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                         <thead style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg-secondary, rgba(255,255,255,0.95))", backdropFilter: "blur(8px)" }}>

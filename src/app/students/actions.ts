@@ -16,7 +16,7 @@ export async function addStudentAction(formData: FormData) {
     const licenseType = formData.get("licenseType") as "LMV" | "MCWG" | "BOTH" | "HMV";
     
     // Simple id generator for studentId
-    const studentId = `STU-${Math.floor(1000 + Math.random() * 9000)}`;
+    const studentId = `STU-${Math.floor(10000 + Math.random() * 90000)}`;
 
     try {
         await prisma.student.create({

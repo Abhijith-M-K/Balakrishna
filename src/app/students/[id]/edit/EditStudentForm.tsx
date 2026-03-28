@@ -212,7 +212,11 @@ export function EditStudentForm({ student }: { student: Student }) {
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border-color)" }}>
-                <Link href={`/students/${student.id}`} className="btn btn-secondary">
+                <Link 
+                    href={`/students/${student.id}`} 
+                    onClick={() => showLoading()}
+                    className="btn btn-secondary"
+                >
                     Cancel
                 </Link>
                 <button type="submit" className="btn btn-primary">

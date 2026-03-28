@@ -106,9 +106,11 @@ export default async function ReportsPage() {
             `}</style>
             
             <div style={{ flexShrink: 0, paddingBottom: "1.5rem" }}>
-                <header style={{ marginBottom: "1.5rem" }}>
-                    <h1 style={{ marginBottom: "0.5rem" }}>Intelligence & Reports</h1>
-                    <p className="text-muted">Export data, analyze performance, and audit financial records.</p>
+                <header className="page-header">
+                    <div>
+                        <h1 style={{ marginBottom: "0.25rem" }}>Intelligence & Reports</h1>
+                        <p className="text-muted">Export data, analyze performance, and audit financial records.</p>
+                    </div>
                 </header>
 
                 <div style={{ 
@@ -136,7 +138,7 @@ export default async function ReportsPage() {
                 
                 <div style={{ 
                     display: "grid", 
-                    gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", 
+                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
                     gap: "1.25rem" 
                 }}>
                 {reports.map((report) => (

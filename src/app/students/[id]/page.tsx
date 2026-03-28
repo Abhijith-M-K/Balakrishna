@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
-import { ArrowLeft, Edit, CalendarDays, Clock, FileBadge, UserCheck, CarFront, CheckCircle2, XCircle } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, Clock, FileBadge, UserCheck, CarFront, CheckCircle2, XCircle } from "lucide-react";
 import { formatDate } from "@/lib/formatters";
+import StudentDetailHeader from "./StudentDetailHeader";
 
 import prisma from "@/lib/prisma";
 
@@ -35,25 +35,13 @@ export default async function StudentDetailsPage({ params }: { params: Promise<{
 
     return (
         <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>
-            <header style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <Link href="/students" className="btn btn-secondary" style={{ padding: "0.5rem" }}>
-                        <ArrowLeft size={18} />
-                    </Link>
-                    <div>
-                        <h1 style={{ marginBottom: "0.25rem" }}>{student.name}</h1>
-                        <p className="text-muted" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                            <span>{student.studentId}</span>
-                            <span>&bull;</span>
-                            <span className="badge badge-accent">{student.status}</span>
-                        </p>
-                    </div>
-                </div>
-                <Link href={`/students/${student.id}/edit`} className="btn btn-secondary">
-                    <Edit size={18} />
-                    Edit Student
-                </Link>
-            </header>
+            <StudentDetailHeader 
+                id={student.id} 
+                dbId={student.id} 
+                name={student.name} 
+                studentId={student.studentId} 
+                status={student.status} 
+            />
 
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "1.5rem" }}>
                 {/* Left Column */}
@@ -189,6 +177,16 @@ export default async function StudentDetailsPage({ params }: { params: Promise<{
                                     <div style={{ fontWeight: 700, color: "var(--success)" }}>
                                         {student.classSchedules.filter((s: any) => s.attended).length} Completed
                                     </div>
+                                </div>
+                            </div>
+
+                            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <div style={{ padding: "0.5rem", background: "rgba(99, 102, 241, 0.1)", borderRadius: "0.5rem", color: "var(--accent-primary)" }}>
+                                    <span style={{ fontWeight: 800 }}>₹</span>
+                                </div>
+                                <div>
+                                    <div className="text-muted" style={{ fontSize: "0.8rem" }}>Total Course Fee</div>
+                                    <div style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "1.1rem" }}>₹{student.totalFee.toLocaleString()}</div>
                                 </div>
                             </div>
                         </div>
