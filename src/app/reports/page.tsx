@@ -79,39 +79,66 @@ export default async function ReportsPage() {
     ];
 
     return (
-        <div className="animate-fade-in" style={{ paddingBottom: "3rem" }}>
-            <header style={{ marginBottom: "2.5rem" }}>
-                <h1 style={{ marginBottom: "0.5rem" }}>Intelligence & Reports</h1>
-                <p className="text-muted">Export data, analyze performance, and audit financial records.</p>
-            </header>
+        <div className="animate-fade-in reports-page-container" style={{ 
+            display: "flex", 
+            flexDirection: "column",
+            overflow: "hidden" 
+        }}>
+            <style>{`
+                .reports-page-container {
+                    height: calc(100dvh - 3rem);
+                }
+                @media (max-width: 1023px) {
+                    .reports-page-container {
+                        height: calc(100dvh - 6rem);
+                    }
+                }
+                .reports-scroll-area::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .reports-scroll-area::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .reports-scroll-area::-webkit-scrollbar-thumb {
+                    background: var(--border-color);
+                    border-radius: 10px;
+                }
+            `}</style>
+            
+            <div style={{ flexShrink: 0, paddingBottom: "1.5rem" }}>
+                <header style={{ marginBottom: "1.5rem" }}>
+                    <h1 style={{ marginBottom: "0.5rem" }}>Intelligence & Reports</h1>
+                    <p className="text-muted">Export data, analyze performance, and audit financial records.</p>
+                </header>
 
-            <div style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-                gap: "1.5rem",
-                marginBottom: "3rem"
-            }}>
-                <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                    <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Total Enrollment</span>
-                    <span style={{ fontSize: "1.75rem", fontWeight: 800 }}>{studentCount}</span>
-                </div>
-                <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                    <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Active Fleet</span>
-                    <span style={{ fontSize: "1.75rem", fontWeight: 800 }}>{vehicleCount}</span>
-                </div>
-                <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                    <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Recent Collections</span>
-                    <span style={{ fontSize: "1.75rem", fontWeight: 800, color: "#10b981" }}>₹{monthlyTotal.toLocaleString()}</span>
+                <div style={{ 
+                    display: "grid", 
+                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+                    gap: "1.5rem"
+                }}>
+                    <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                        <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Total Enrollment</span>
+                        <span style={{ fontSize: "1.75rem", fontWeight: 800 }}>{studentCount}</span>
+                    </div>
+                    <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                        <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Active Fleet</span>
+                        <span style={{ fontSize: "1.75rem", fontWeight: 800 }}>{vehicleCount}</span>
+                    </div>
+                    <div className="glass-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                        <span className="text-muted" style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>Recent Collections</span>
+                        <span style={{ fontSize: "1.75rem", fontWeight: 800, color: "#10b981" }}>₹{monthlyTotal.toLocaleString()}</span>
+                    </div>
                 </div>
             </div>
 
-            <h2 style={{ fontSize: "1.1rem", marginBottom: "1.5rem", fontWeight: 700, color: "var(--text-secondary)" }}>Available Report Categories</h2>
-            
-            <div style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", 
-                gap: "1.25rem" 
-            }}>
+            <div className="reports-scroll-area" style={{ flex: 1, overflowY: "auto", paddingRight: "0.5rem", paddingBottom: "2rem" }}>
+                <h2 style={{ fontSize: "1.1rem", marginBottom: "1.5rem", fontWeight: 700, color: "var(--text-secondary)" }}>Available Report Categories</h2>
+                
+                <div style={{ 
+                    display: "grid", 
+                    gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", 
+                    gap: "1.25rem" 
+                }}>
                 {reports.map((report) => (
                     <Link key={report.id} href={`/reports/${report.id}`} style={{ textDecoration: "none" }}>
                         <div className="glass-card hover-lift" style={{ 
@@ -156,6 +183,7 @@ export default async function ReportsPage() {
                     border-color: transparent;
                 }
             `}</style>
+            </div>
         </div>
     );
 }

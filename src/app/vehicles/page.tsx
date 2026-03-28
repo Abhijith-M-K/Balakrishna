@@ -34,17 +34,36 @@ export default async function VehiclesPage() {
     }).length;
 
     return (
-        <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>
-            <div style={{ 
-                position: "sticky", 
-                top: "-1rem", 
-                zIndex: 30, 
-                background: "var(--bg-primary)", 
-                padding: "1rem", 
-                margin: "-1rem -1rem 2rem -1rem", 
-                borderBottom: "1px solid var(--border-color)",
-                boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)"
-            }}>
+        <div className="animate-fade-in vehicles-page-container" style={{ 
+            display: "flex", 
+            flexDirection: "column",
+            overflow: "hidden" 
+        }}>
+            <style>{`
+                .vehicles-page-container {
+                    height: calc(100dvh - 3rem);
+                }
+                @media (max-width: 1023px) {
+                    .vehicles-page-container {
+                        height: calc(100dvh - 6rem);
+                    }
+                }
+                /* Custom scrollbar for better aesthetics */
+                .vehicles-scroll-area::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .vehicles-scroll-area::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .vehicles-scroll-area::-webkit-scrollbar-thumb {
+                    background: var(--border-color);
+                    border-radius: 10px;
+                }
+                .vehicles-scroll-area::-webkit-scrollbar-thumb:hover {
+                    background: var(--text-muted);
+                }
+            `}</style>
+            <div style={{ flexShrink: 0, paddingBottom: "1.5rem" }}>
                 <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
                     <div>
                         <h1 style={{ marginBottom: "0.25rem" }}>Vehicle Management</h1>
@@ -83,25 +102,32 @@ export default async function VehiclesPage() {
                 </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "1.5rem" }}>
-                {vehicles.length === 0 ? (
-                    <div style={{ gridColumn: "1 / -1", padding: "3rem", textAlign: "center", color: "var(--text-muted)", background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", border: "1px dashed var(--border-color)" }}>
-                        No vehicles found in fleet. Click 'Add Vehicle' to register your first car or bike.
-                    </div>
-                ) : (
-                    vehicles.map((v: any) => (
-                        <VehicleCard
-                            key={v.id}
-                            id={v.id}
-                            type={v.vehicleType} 
-                            name={`${v.vehicleType} Training Vehicle`} 
-                            regNo={v.registrationNumber}
-                            insurance={v.insuranceExpiry}
-                            pollution={v.pollutionExpiry}
-                            service={v.serviceReminder}
-                        />
-                    ))
-                )}
+            <div className="vehicles-scroll-area" style={{ 
+                flex: 1, 
+                overflowY: "auto", 
+                paddingRight: "0.5rem",
+                paddingBottom: "2rem" 
+            }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "1.5rem" }}>
+                    {vehicles.length === 0 ? (
+                        <div style={{ gridColumn: "1 / -1", padding: "3rem", textAlign: "center", color: "var(--text-muted)", background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", border: "1px dashed var(--border-color)" }}>
+                            No vehicles found in fleet. Click 'Add Vehicle' to register your first car or bike.
+                        </div>
+                    ) : (
+                        vehicles.map((v: any) => (
+                            <VehicleCard
+                                key={v.id}
+                                id={v.id}
+                                type={v.vehicleType} 
+                                name={`${v.vehicleType} Training Vehicle`} 
+                                regNo={v.registrationNumber}
+                                insurance={v.insuranceExpiry}
+                                pollution={v.pollutionExpiry}
+                                service={v.serviceReminder}
+                            />
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

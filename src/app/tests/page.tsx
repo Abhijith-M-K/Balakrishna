@@ -65,21 +65,34 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
     };
 
     return (
-        <div className="animate-fade-in" style={{ paddingBottom: "2rem" }}>
-            <div style={{ 
-                position: "sticky", 
-                top: "0", 
-                zIndex: 30, 
-                background: "var(--bg-primary)", 
-                paddingTop: "1rem", 
-                paddingBottom: "1rem", 
-                margin: "-1rem -1rem 2rem -1rem", 
-                paddingLeft: "1rem", 
-                paddingRight: "1rem", 
-                borderBottom: "1px solid var(--border-color)",
-                backdropFilter: "blur(10px)"
-            }}>
-                <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
+        <div className="animate-fade-in tests-page-container" style={{ 
+            display: "flex", 
+            flexDirection: "column",
+            overflow: "hidden" 
+        }}>
+            <style>{`
+                .tests-page-container {
+                    height: calc(100dvh - 3rem);
+                }
+                @media (max-width: 1023px) {
+                    .tests-page-container {
+                        height: calc(100dvh - 6rem);
+                    }
+                }
+                .tests-scroll-area::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .tests-scroll-area::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .tests-scroll-area::-webkit-scrollbar-thumb {
+                    background: var(--border-color);
+                    border-radius: 10px;
+                }
+            `}</style>
+            
+            <div style={{ flexShrink: 0 }}>
+                <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
                     <div>
                         <h1 style={{ marginBottom: "0.25rem" }}>Driving Test Management</h1>
                         <p className="text-muted">Schedule RTO tests, assign vehicles, and log results.</p>
@@ -89,42 +102,44 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
                         Schedule Test
                     </Link>
                 </header>
+
+                {/* Filter Bar */}
+                <form method="GET" action="/tests" className="glass-card" style={{ padding: "1rem 1.5rem", marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+                    <input type="hidden" name="status" value={filterStatus || 'pending'} />
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+                        <Filter size={18} />
+                        <span>Filter by Date:</span>
+                    </div>
+                    <div style={{ position: "relative", flex: 1, maxWidth: "300px" }}>
+                        <input
+                            name="date"
+                            type="date"
+                            defaultValue={filterDate || ''}
+                            style={{
+                                width: "100%",
+                                padding: "0.6rem 1rem",
+                                background: "var(--bg-tertiary)",
+                                border: "1px solid var(--border-color)",
+                                borderRadius: "var(--radius-md)",
+                                color: "var(--text-primary)",
+                                outline: "none",
+                                fontFamily: "inherit"
+                            }}
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary" style={{ padding: "0.6rem 1.5rem" }}>
+                        Apply Filter
+                    </button>
+                    {filterDate && (
+                        <Link href={`/tests${filterStatus ? `?status=${filterStatus}` : ''}`} className="btn btn-secondary" style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1rem" }}>
+                            <X size={16} />
+                            Clear
+                        </Link>
+                    )}
+                </form>
             </div>
 
-            {/* Filter Bar */}
-            <form method="GET" action="/tests" className="glass-card" style={{ padding: "1rem 1.5rem", marginBottom: "2rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-                <input type="hidden" name="status" value={filterStatus || 'pending'} />
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
-                    <Filter size={18} />
-                    <span>Filter by Date:</span>
-                </div>
-                <div style={{ position: "relative", flex: 1, maxWidth: "300px" }}>
-                    <input
-                        name="date"
-                        type="date"
-                        defaultValue={filterDate || ''}
-                        style={{
-                            width: "100%",
-                            padding: "0.6rem 1rem",
-                            background: "var(--bg-tertiary)",
-                            border: "1px solid var(--border-color)",
-                            borderRadius: "var(--radius-md)",
-                            color: "var(--text-primary)",
-                            outline: "none",
-                            fontFamily: "inherit"
-                        }}
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ padding: "0.6rem 1.5rem" }}>
-                    Apply Filter
-                </button>
-                {filterDate && (
-                    <Link href={`/tests${filterStatus ? `?status=${filterStatus}` : ''}`} className="btn btn-secondary" style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1rem" }}>
-                        <X size={16} />
-                        Clear
-                    </Link>
-                )}
-            </form>
+            <div className="tests-scroll-area" style={{ flex: 1, overflowY: "auto", paddingRight: "0.5rem", paddingBottom: "2rem" }}>
 
             {/* Tabs */}
             <div style={{ display: "flex", gap: "2rem", marginBottom: "2rem", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
@@ -246,5 +261,6 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
                 )}
             </div>
         </div>
-    );
+    </div>
+);
 }

@@ -26,9 +26,33 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
     });
 
     return (
-        <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 4rem)", paddingBottom: "2rem" }}>
+        <div className="animate-fade-in fees-page-container" style={{ 
+            display: "flex", 
+            flexDirection: "column",
+            overflow: "hidden" 
+        }}>
+            <style>{`
+                .fees-page-container {
+                    height: calc(100dvh - 3rem);
+                }
+                @media (max-width: 1023px) {
+                    .fees-page-container {
+                        height: calc(100dvh - 6rem);
+                    }
+                }
+                .fees-scroll-area::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .fees-scroll-area::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .fees-scroll-area::-webkit-scrollbar-thumb {
+                    background: var(--border-color);
+                    border-radius: 10px;
+                }
+            `}</style>
             
-            <div style={{ position: "sticky", top: 0, zIndex: 40, background: "var(--bg-primary)", paddingTop: "1rem" }}>
+            <div style={{ flexShrink: 0 }}>
                 <header style={{ marginBottom: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                     <div>
                         <h1 style={{ marginBottom: "0.5rem" }}>Fee Payments</h1>
@@ -66,8 +90,8 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
                 </form>
             </div>
 
-            <div className="glass-card" style={{ overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
-                <div style={{ maxHeight: "calc(100vh - 240px)", overflowY: "auto", overflowX: "auto", width: "100%" }}>
+            <div className="glass-card fees-scroll-area" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", marginBottom: "2rem" }}>
+                <div style={{ overflowY: "auto", overflowX: "auto", width: "100%", flex: 1 }}>
                     <table style={{ minWidth: "800px", width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                         <thead style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg-secondary, rgba(255,255,255,0.95))", backdropFilter: "blur(8px)" }}>
                             <tr style={{ borderBottom: "1px solid var(--border-color)", boxShadow: "0 1px 0 0 var(--border-color)" }}>
