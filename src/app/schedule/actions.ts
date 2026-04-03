@@ -100,5 +100,28 @@ export async function editSchedule(id: string, formData: FormData) {
     }
 
     revalidatePath("/schedule");
+    revalidatePath(`/students/${studentId}`);
     redirect("/schedule");
+}
+
+export async function deleteSchedule(id: string) {
+    try {
+        const schedule = await prisma.classSchedule.findUnique({
+            where: { id },
+            select: { studentId: true }
+        });
+
+        if (!schedule) throw new Error("Schedule not found");
+
+        await prisma.classSchedule.delete({
+            where: { id }
+        });
+
+        revalidatePath("/schedule");
+        revalidatePath(`/students/${schedule.studentId}`);
+        return { success: true };
+    } catch (error: any) {
+        console.error("Delete error:", error);
+        return { error: error.message || "Failed to delete schedule" };
+    }
 }

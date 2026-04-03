@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
-import { Save } from "lucide-react";
+import React, { useTransition } from "react";
+import { Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { addAdditionalClassAction } from "./actions";
 import { useLoading } from "@/context/LoadingContext";
 import { toast } from "sonner";
+import StudentSearchSelect from "@/components/ui/StudentSearchSelect";
+
 import { Student } from "@prisma/client";
 
 export function AdditionalClassForm({ students }: { students: Student[] }) {
     const { showLoading, hideLoading } = useLoading();
+    const [isPending, startTransition] = useTransition();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -17,52 +20,32 @@ export function AdditionalClassForm({ students }: { students: Student[] }) {
         
         showLoading("Recording additional class...");
         
-        try {
-            const result = await addAdditionalClassAction(formData);
-            
-            if (result?.error) {
-                toast.error(result.error);
-                hideLoading();
-            } else {
-                toast.success("Additional class recorded successfully!");
-            }
-        } catch (error: any) {
-            if (error.message?.includes("NEXT_REDIRECT")) {
-                toast.success("Additional class recorded successfully!");
-                return;
-            }
-            console.error("Action error:", error);
-            toast.error(error.message || "Failed to record. Please try again.");
-            hideLoading();
-        }
+        setTimeout(() => {
+            startTransition(async () => {
+                try {
+                    await addAdditionalClassAction(formData);
+                } catch (error: any) {
+                    if (error.message?.includes("NEXT_REDIRECT")) {
+                        toast.success("Additional class recorded successfully!");
+                        return;
+                    }
+                    console.error("Action error:", error);
+                    toast.error(error.message || "Failed to record. Please try again.");
+                    hideLoading(true);
+                }
+            });
+        }, 10);
     }
 
     return (
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    <label style={{ fontWeight: 500, fontSize: "0.9rem", color: "var(--text-primary)" }}>Select Student <span style={{color: "var(--danger)"}}>*</span></label>
-                    <select 
-                        name="studentId"
-                        required
-                        style={{
-                            padding: "0.75rem 1rem",
-                            background: "var(--bg-tertiary)",
-                            border: "1px solid var(--border-color)",
-                            borderRadius: "var(--radius-md)",
-                            color: "var(--text-primary)",
-                            outline: "none",
-                            cursor: "pointer"
-                        }}
-                    >
-                        <option value="">-- Choose Student --</option>
-                        {students.map((student) => (
-                            <option key={student.id} value={student.id}>
-                                {student.name} ({student.studentId}) - {student.status}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <StudentSearchSelect 
+                    students={students as any} 
+                    name="studentId" 
+                    label="Select Student"
+                    required
+                />
                 
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                     <label style={{ fontWeight: 500, fontSize: "0.9rem", color: "var(--text-primary)" }}>License Type <span style={{color: "var(--danger)"}}>*</span></label>
@@ -151,8 +134,18 @@ export function AdditionalClassForm({ students }: { students: Student[] }) {
                 <Link href="/additional-classes" className="btn btn-secondary">
                     Cancel
                 </Link>
-                <button type="submit" className="btn btn-primary">
-                    <Save size={18} /> Record Class
+                <button type="submit" className="btn btn-primary" disabled={isPending}>
+                    {isPending ? (
+                        <>
+                            <Loader2 size={18} className="animate-spin" />
+                            Recording...
+                        </>
+                    ) : (
+                        <>
+                            <Save size={18} />
+                            Record Class
+                        </>
+                    )}
                 </button>
             </div>
         </form>

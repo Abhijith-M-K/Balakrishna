@@ -43,3 +43,25 @@ export async function addFeePayment(formData: FormData) {
     revalidatePath(`/students/${studentId}`);
     redirect("/fees");
 }
+
+export async function deleteFeePayment(id: string) {
+    try {
+        const payment = await prisma.feePayment.findUnique({
+            where: { id },
+            select: { studentId: true }
+        });
+
+        if (!payment) throw new Error("Payment record not found");
+
+        await prisma.feePayment.delete({
+            where: { id }
+        });
+
+        revalidatePath("/fees");
+        revalidatePath(`/students/${payment.studentId}`);
+        return { success: true };
+    } catch (error: any) {
+        console.error("Delete error:", error);
+        return { error: error.message || "Failed to delete payment record" };
+    }
+}

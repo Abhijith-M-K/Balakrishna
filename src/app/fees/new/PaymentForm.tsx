@@ -1,47 +1,58 @@
 "use client";
 
-import { useState } from "react";
-import { Save } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Save, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useLoading } from "@/context/LoadingContext";
+import { toast } from "sonner";
+import StudentSearchSelect from "@/components/ui/StudentSearchSelect";
 import { addFeePayment } from "../actions";
 
 export default function PaymentForm({ students }: { students: any[] }) {
-    const [searchTerm, setSearchTerm] = useState("");
+    const { showLoading, hideLoading } = useLoading();
+    const [isPending, startTransition] = useTransition();
+    const [selectedStudent, setSelectedStudent] = useState<any>(null);
     const [paidAmount, setPaidAmount] = useState<number | "">("");
 
-    // Look for exact matches against the constructed datalist string
-    const selectedStudent = students.find(s => `${s.name} (${s.studentId})` === searchTerm) || null;
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        
+        // Show loading immediately
+        showLoading("Recording payment...");
+        
+        // Small timeout to ensure the UI has updated before starting the transition
+        // This is a common pattern to fix 'missing' loader issues caused by batching
+        setTimeout(() => {
+            startTransition(async () => {
+                try {
+                    await addFeePayment(formData);
+                } catch (error: any) {
+                    if (error.message?.includes("NEXT_REDIRECT")) {
+                        toast.success("Payment recorded successfully!");
+                        return;
+                    }
+                    console.error("Action error:", error);
+                    toast.error(error.message || "Failed to record payment. Please try again.");
+                    hideLoading(true); // Force hide on real error
+                }
+            });
+        }, 10);
+    }
 
     const remainingBalance = selectedStudent ? selectedStudent.balance : 0;
     const newBalance = selectedStudent ? (remainingBalance - (Number(paidAmount) || 0)) : 0;
 
     return (
-        <form action={addFeePayment} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             
-            {/* Server Action Target ID */}
-            <input type="hidden" name="studentId" value={selectedStudent?.id || ""} required />
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                <label style={{ fontWeight: 500, fontSize: "0.9rem", color: "var(--text-primary)" }}>Select Enrolled Student <span style={{color: "var(--danger)"}}>*</span></label>
-                <input 
-                    list="student-datalist"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Type to search student name or ID..."
-                    required
-                    style={{ 
-                        padding: "0.75rem 1rem", 
-                        background: "var(--bg-tertiary)", 
-                        border: "1px solid var(--border-color)", 
-                        borderRadius: "var(--radius-md)", 
-                        color: "var(--text-primary)", 
-                        outline: "none"
-                    }}
-                />
-                <datalist id="student-datalist">
-                    {students.map(s => <option key={s.id} value={`${s.name} (${s.studentId})`} />)}
-                </datalist>
-            </div>
+            <StudentSearchSelect 
+                students={students} 
+                name="studentId" 
+                label="Select Enrolled Student"
+                required
+                onSelect={(s) => setSelectedStudent(s)}
+            />
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -126,8 +137,18 @@ export default function PaymentForm({ students }: { students: any[] }) {
                 <Link href="/fees" className="btn btn-secondary">
                     Cancel
                 </Link>
-                <button type="submit" className="btn btn-primary" disabled={!selectedStudent}>
-                    <Save size={18} /> Record Payment
+                <button type="submit" className="btn btn-primary" disabled={!selectedStudent || isPending}>
+                    {isPending ? (
+                        <>
+                            <Loader2 size={18} className="animate-spin" />
+                            Recording...
+                        </>
+                    ) : (
+                        <>
+                            <Save size={18} />
+                            Record Payment
+                        </>
+                    )}
                 </button>
             </div>
         </form>

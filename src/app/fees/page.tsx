@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Plus, Search, CheckCircle2, AlertCircle } from "lucide-react";
 import prisma from "@/lib/prisma";
 import DownloadReceiptButton from "./DownloadReceiptButton";
+import DeleteConfirmButton from "@/components/ui/DeleteConfirmButton";
+import { deleteFeePayment } from "./actions";
 import { formatDate } from "@/lib/formatters";
 
 export const dynamic = 'force-dynamic';
@@ -146,8 +148,14 @@ export default async function FeesPage({ searchParams }: { searchParams: Promise
                                             )}
                                         </td>
                                         <td style={{ padding: "1rem 1.5rem", textAlign: "right" }}>
-                                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                                            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
                                                 <DownloadReceiptButton payment={payment} />
+                                                <DeleteConfirmButton 
+                                                    id={payment.id} 
+                                                    entityName="Payment"
+                                                    action={deleteFeePayment}
+                                                    confirmMessage={`Are you sure you want to delete the payment of ₹${payment.paidAmount} for ${payment.student.name}?`}
+                                                />
                                             </div>
                                         </td>
                                     </tr>

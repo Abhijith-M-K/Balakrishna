@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { formatDate } from "@/lib/formatters";
 import AttendanceToggle from "./AttendanceToggle";
+import DeleteConfirmButton from "@/components/ui/DeleteConfirmButton";
+import { deleteSchedule } from "./actions";
 
 export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
     const { date: filterDate } = await searchParams;
@@ -251,6 +253,13 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                                                     </Link>
                                                 )}
                                                 
+                                                <DeleteConfirmButton 
+                                                    id={schedule.id}
+                                                    entityName="Session"
+                                                    action={deleteSchedule}
+                                                    confirmMessage={`Are you sure you want to cancel the session for ${schedule.student.name} on ${formatDate(schedule.date)}?`}
+                                                />
+
                                                 <div style={{ 
                                                     display: "flex", 
                                                     flexDirection: "column", 

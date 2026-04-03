@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Plus, Search, FilePlus, Calendar } from "lucide-react";
 import prisma from "@/lib/prisma";
 import DownloadReceiptButton from "./DownloadReceiptButton";
+import DeleteConfirmButton from "@/components/ui/DeleteConfirmButton";
+import { deleteAdditionalClass } from "./actions";
 import { formatDate } from "@/lib/formatters";
 
 export const dynamic = 'force-dynamic';
@@ -135,8 +137,14 @@ export default async function AdditionalClassesPage({ searchParams }: { searchPa
                                             {record.notes && <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontStyle: "italic", maxWidth: "150px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={record.notes}>{record.notes}</div>}
                                         </td>
                                         <td style={{ padding: "1rem 1.5rem", textAlign: "right" }}>
-                                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                                            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
                                                 <DownloadReceiptButton record={record} />
+                                                <DeleteConfirmButton 
+                                                    id={record.id} 
+                                                    entityName="Additional Class"
+                                                    action={deleteAdditionalClass}
+                                                    confirmMessage={`Are you sure you want to delete the record for ${record.student.name}'s ${record.licenseType} class?`}
+                                                />
                                             </div>
                                         </td>
                                     </tr>

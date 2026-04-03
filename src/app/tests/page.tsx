@@ -15,6 +15,8 @@ import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/formatters";
 import Link from "next/link";
 import TestResultButtons from "./TestResultButtons";
+import DeleteConfirmButton from "@/components/ui/DeleteConfirmButton";
+import { deleteTest } from "./actions";
 
 export default async function TestsPage({ searchParams }: { searchParams: Promise<{ status?: string, date?: string }> }) {
     const { status: filterStatus, date: filterDate } = await searchParams;
@@ -252,6 +254,13 @@ export default async function TestsPage({ searchParams }: { searchParams: Promis
 
                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
                                             <TestResultButtons id={test.id} currentStatus={test.status} />
+                                            <DeleteConfirmButton 
+                                                id={test.id}
+                                                entityName="Test"
+                                                action={deleteTest}
+                                                variant="button"
+                                                confirmMessage={`Are you sure you want to delete the test record for ${test.student.name}?`}
+                                            />
                                         </div>
                                     </div>
                                 ))}

@@ -39,3 +39,25 @@ export async function addAdditionalClassAction(formData: FormData) {
     revalidatePath(`/students/${studentId}`);
     redirect("/additional-classes");
 }
+
+export async function deleteAdditionalClass(id: string) {
+    try {
+        const record = await prisma.additionalClass.findUnique({
+            where: { id },
+            select: { studentId: true }
+        });
+
+        if (!record) throw new Error("Record not found");
+
+        await prisma.additionalClass.delete({
+            where: { id }
+        });
+
+        revalidatePath("/additional-classes");
+        revalidatePath(`/students/${record.studentId}`);
+        return { success: true };
+    } catch (error: any) {
+        console.error("Delete error:", error);
+        return { error: error.message || "Failed to delete record" };
+    }
+}

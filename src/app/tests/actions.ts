@@ -35,7 +35,30 @@ export async function scheduleTest(formData: FormData) {
     }
 
     revalidatePath("/tests");
+    revalidatePath(`/students/${studentId}`);
     redirect("/tests");
+}
+
+export async function deleteTest(id: string) {
+    try {
+        const test = await prisma.testSchedule.findUnique({
+            where: { id },
+            select: { studentId: true }
+        });
+
+        if (!test) throw new Error("Test record not found");
+
+        await prisma.testSchedule.delete({
+            where: { id }
+        });
+
+        revalidatePath("/tests");
+        revalidatePath(`/students/${test.studentId}`);
+        return { success: true };
+    } catch (error: any) {
+        console.error("Delete error:", error);
+        return { error: error.message || "Failed to delete test record" };
+    }
 }
 
 export async function updateTestStatus(id: string, status: TestStatus) {
